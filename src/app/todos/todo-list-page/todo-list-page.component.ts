@@ -3,7 +3,10 @@ import {Todo} from '../models/todo';
 import {Store} from '@ngrx/store';
 import * as TodoActions from '../actions/todo.actions';
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import { RootState, selectAllTodos } from 'src/app/root.state';
+
+
 
 @Component({
   selector: 'app-todo-list-page',
@@ -34,43 +37,47 @@ export class TodoListPageComponent implements OnInit {
 
   todos: Todo[] = [];
 
-  todoTestData: Todo[] = [
-    {
-      id: 1,
-      text: 'da otida za hlqb',
-      createdAt: new Date(),
-      completed: false
-    },
-    {
-      id: 2,
-      text: 'da otida za voda',
-      createdAt: new Date(),
-      completed: false
-    },
-    {
-      id: 3,
-      text: 'da otida do Varna',
-      createdAt: new Date(),
-      completed: false
-    }];
+  // todoTestData: Todo[] = [
+  //   {
+  //     id: 1,
+  //     text: 'da otida za hlqb',
+  //     createdAt: new Date(),
+  //     completed: false
+  //   },
+  //   {
+  //     id: 2,
+  //     text: 'da otida za voda',
+  //     createdAt: new Date(),
+  //     completed: false
+  //   },
+  //   {
+  //     id: 3,
+  //     text: 'da otida do Varna',
+  //     createdAt: new Date(),
+  //     completed: false
+  //   }];
 
-  constructor(private store: Store) {
+  constructor(private store: Store<RootState>) {
+    this.store
+      .select(selectAllTodos)
+      .subscribe((todos) => (this.todos = todos));
     // this.store.dispatch(TodoActions.FillInTodos({todos: this.todoTestData}));
   }
 
   ngOnInit() {
 
-    this.store.select((state: any) => state)
-      .subscribe((data) => {
-        console.log(data);
-        if (data) {
-          this.todos = data.todoReducerState.todos;
-        }
-      });
+    // this.store.select((state: any) => state)
+    //   .subscribe((data) => {
+    //     console.log(data);
+    //     if (data) {
+    //       this.todos = data.todoReducerState.todos;
+    //     }
+    //   });
+
 
     const btn = document.getElementById('addTodo');
-    document.body.onkeydown = function(e) {
-      if (e.key === 'Enter') btn.click();
+    document.body.onkeydown = (e) => {
+      if (e.key === 'Enter') {btn.click()}
     };
 
   }

@@ -4,6 +4,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Todo} from '../models/todo';
 import * as TodoActions from '../actions/todo.actions';
+import {selectById} from '../reducers/todo.reducer';
+import {RootState, selectTodoById} from '../../root.state';
 
 @Component({
   selector: 'app-todo-edit-page',
@@ -24,7 +26,7 @@ export class TodoEditPageComponent implements OnInit {
   public createdAt: FormControl;
   public text: FormControl;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private store: Store, private router: Router) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private store: Store<RootState>, private router: Router) {
 
     this.todoEditForm = this.fb.group({
       createdAt: this.todo.createdAt,
@@ -35,13 +37,19 @@ export class TodoEditPageComponent implements OnInit {
   ngOnInit() {
     const id: string = this.route.snapshot.params.id;
 
-    this.store
-      .select((state: any) => state.todoReducerState)
-      .subscribe((t) => {
-        console.log(t);
-        this.todo = t.todos
-          .find((todo) => id == todo.id);
-      });
+    // this.store
+    //   .select((state: any) => state.todoReducerState)
+    //   .subscribe((t) => {
+    //     console.log(t);
+    //     this.todo = t.todos
+    //       .find((todo) => id == todo.id);
+    //   });
+
+    this.store.select(selectTodoById(id)).subscribe((todo) => {
+      this.todo = todo;
+      }
+    );
+
     this.todoEditForm.patchValue(this.todo);
   }
 
@@ -50,7 +58,10 @@ export class TodoEditPageComponent implements OnInit {
       const id: string = this.route.snapshot.params.id;
       const changes: any = this.todoEditForm.value;
 
-      this.store.dispatch(TodoActions.EditTodo({id, changes}));
+      this.store.dispatch(TodoActions.EditTodo({
+        updates: {id, changes},
+      })
+      );
       this.router.navigateByUrl('/todos');
     }
   }

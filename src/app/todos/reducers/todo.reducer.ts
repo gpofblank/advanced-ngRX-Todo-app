@@ -1,117 +1,39 @@
-import {Action, createReducer, on} from '@ngrx/store';
+import {createEntityAdapter, EntityAdapter, EntityState} from '@ngrx/entity';
+import {Action, createReducer, createSelector, on} from '@ngrx/store';
 import {Todo} from '../models/todo';
 
 import * as TodoActions from '../actions/todo.actions';
 
-export interface TodosState {
-  todos: Todo[];
+export interface State extends EntityState<Todo> {
+  ids: [];
+  entities: {};
 }
 
-export const initialState: TodosState = {
-  todos: [] // I fill the initial state in through dispatching to an action but it could be hardcoded here too.
-};
+export const adapter: EntityAdapter<Todo> = createEntityAdapter<Todo>();
+
+const initialState: EntityState<Todo> = adapter.getInitialState();
 
 const todoReducer = createReducer(
   initialState,
 
-  // on(TodoActions.GetTodoById, (state, {id}) => {
-  //   console.log('get todo by id action');
-  //
-  //   return {
-  //     ...state,
-  //   };
-  // }),
+  on(TodoActions.EditTodo, (state, {updates}) =>
+    adapter.updateOne(updates, state)
+  ),
 
-  on(TodoActions.ReorderTodo, (state, {prevIndex, currIndex}) => {
-    console.log('reorder todo action');
+  on(TodoActions.AddTodo, (state, {todo}) =>
+    adapter.addOne(todo, state)
+  ),
+);
 
-    return {
-      ...state,
-      todos: reorder(state.todos, prevIndex, currIndex)
-    };
-  }),
-
-  on(TodoActions.EditTodo, (state, {id, changes}) => {
-    console.log('edit todo action');
-    console.log(changes);
-    return {
-      ...state,
-      todos: state.todos.map((t) => {
-        if (t.id == id) {
-          t = {...t, ...changes};
-        }
-        return t;
-      })
-    };
-  }),
-
-  on(TodoActions.AddTodo, (state, {todo}) => {
-    console.log('add todo action');
-
-    return {
-      ...state,
-      todos: [todo, ...state.todos]
-    };
-  }),
-  on(TodoActions.CancelTodo, (state, {todo, completed}) => {
-    console.log('cancel todo action');
-
-    return {
-      ...state,
-      todos: state.todos.map((t) => {
-        if (t.id == todo.id) {
-          t = {...t, completed};
-        }
-        return t;
-      })
-    };
-  }),
-  on(TodoActions.CompleteTodo, (state, {todo, completed}) => {
-    console.log('complete todo action');
-
-    return {
-      ...state,
-      todos: state.todos.map((t) => {
-        if (t.id == todo.id) {
-          t = {...t, completed};
-        }
-        return t;
-      })
-    };
-  }),
-  on(TodoActions.FillInTodos, (state, {todos}) => {
-    console.log('fill in todos action');
-
-    return {
-      ...state,
-      todos
-    };
-  }),
-  on(TodoActions.GetTodos, (state) => {
-    console.log('get todos action');
-
-    return {
-      ...state,
-    };
-  }),
-
-// on(TodoActions.DeleteTodo, (state, {todoId}) => {
-//   return {
-//     ...state,
-//     todos: state.todos.filter(t => t.id != todoId)
-//   };
-// })
-  )
-;
-
-export function todoReducerState(state: TodosState | undefined, action: Action) {
+export const reducer = (state: State, action: Action) => {
   return todoReducer(state, action);
-}
-
-const reorder = (arr, from, to) => {
-  const clone = [...arr];
-  Array.prototype.splice.call(clone, to, 0,
-    Array.prototype.splice.call(clone, from, 1)[0]
-  );
-  return clone;
 };
+
+export const {selectEntities} = adapter.getSelectors();
+
+// equal to the select all function from adapter.getSelectors()
+export const selectAll = (state: EntityState<Todo>) =>
+  (state.ids as number[]).map((id) => state.entities[id]);
+
+export const selectById = (id) =>
+  createSelector(selectEntities, (todoEntries) => todoEntries[id]);

@@ -15,11 +15,11 @@ export class TodoComponent implements OnInit {
   constructor(private store: Store) {}
 
   public onComplete() {
-    this.store.dispatch(TodoActions.CompleteTodo({todo: this.todo, completed: true}));
+    this.store.dispatch(TodoActions.EditTodo({ updates: { id: this.todo.id, changes: {completed: true}}}));
   }
 
   public cancel() {
-    this.store.dispatch(TodoActions.CancelTodo({todo: this.todo, completed: false}));
+    this.store.dispatch(TodoActions.EditTodo({ updates: { id: this.todo.id, changes: {completed: false}}}));
   }
 
   ngOnInit(): void {}
