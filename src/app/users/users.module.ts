@@ -12,8 +12,6 @@ import {EditUserPageComponent} from './edit-user-page/edit-user-page.component';
 import {ListUsersPageComponent} from './list-users-page/list-users-page.component';
 import {UserDetailsPageComponent} from './user-details-page/user-details-page.component';
 import {UserComponent} from './user/user.component';
-import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {environment} from '../../environments/environment';
 
 
 @NgModule({
@@ -27,12 +25,12 @@ import {environment} from '../../environments/environment';
   imports: [
     CommonModule,
     AppRoutingModule,
-    StoreModule.forFeature('users', fromUsers.reducer),
     ReactiveFormsModule,
     FormsModule,
     MaterialModule,
     DragDropModule,
-    RouterModule
+    RouterModule,
+    StoreModule.forFeature('users', fromUsers.reducer),
   ]
 })
 export class UsersModule {

@@ -12,9 +12,8 @@ import {MaterialModule} from './material/material.module';
 import {StartComponent} from './start/start.component';
 import {TodosModule} from './todos/todos.module';
 import {RouterModule} from '@angular/router';
+import {UsersModule} from './users/users.module';
 
-import * as fromUsers from './users/reducers/user.reducer';
-import * as fromTodos from './todos/reducers/todo.reducer';
 
 
 @NgModule({
@@ -29,6 +28,7 @@ import * as fromTodos from './todos/reducers/todo.reducer';
     StoreDevtoolsModule.instrument({maxAge: 25, logOnly: environment.production}),
     MaterialModule,
     TodosModule,
+    UsersModule,
     RouterModule
   ],
   providers: [],
