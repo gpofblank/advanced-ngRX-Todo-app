@@ -5,8 +5,6 @@ import {User} from '../models/user';
 import * as UserActions from '../actions/user.actions';
 
 export interface State extends EntityState<User> {
-  ids: [];
-  entities: {};
 }
 
 export const adapter: EntityAdapter<User> = createEntityAdapter<User>();

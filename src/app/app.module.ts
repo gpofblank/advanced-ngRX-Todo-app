@@ -13,6 +13,10 @@ import {StartComponent} from './start/start.component';
 import {TodosModule} from './todos/todos.module';
 import {RouterModule} from '@angular/router';
 
+import * as fromUsers from './users/reducers/user.reducer';
+import * as fromTodos from './todos/reducers/todo.reducer';
+
+
 @NgModule({
   declarations: [
     AppComponent, StartComponent

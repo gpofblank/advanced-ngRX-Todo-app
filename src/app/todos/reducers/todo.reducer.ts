@@ -5,8 +5,6 @@ import {Todo} from '../models/todo';
 import * as TodoActions from '../actions/todo.actions';
 
 export interface State extends EntityState<Todo> {
-  ids: [];
-  entities: {};
 }
 
 export const adapter: EntityAdapter<Todo> = createEntityAdapter<Todo>();
