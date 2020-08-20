@@ -86,6 +86,11 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
     });
 
     this.todoEditForm.patchValue(this.todo);
+
+    const btn = document.getElementById('saveTodo');
+    document.body.onkeydown = (e) => {
+      if (e.key === 'Enter') {btn.click()}
+    };
   }
 
   add(event: MatChipInputEvent): void {

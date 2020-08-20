@@ -35,6 +35,10 @@ export class CreateUserPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    const btn = document.getElementById('addUser');
+    document.body.onkeydown = (e) => {
+      if (e.key === 'Enter') {btn.click()}
+    };
   }
 
   submit() {

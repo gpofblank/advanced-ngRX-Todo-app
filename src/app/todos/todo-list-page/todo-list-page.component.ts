@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Todo} from '../models/todo';
 import {Store} from '@ngrx/store';
 import * as TodoActions from '../actions/todo.actions';
@@ -8,7 +8,7 @@ import {RootState, selectAllTodos, selectAllUsers} from 'src/app/root.state';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl} from '@angular/forms';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {Observable, scheduled, throwError} from 'rxjs';
+import {Observable, scheduled, Subscription, throwError} from 'rxjs';
 import {filter, map, startWith} from 'rxjs/operators';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {User} from '../../users/models/user';
@@ -39,7 +39,11 @@ import {User} from '../../users/models/user';
     ])
   ]
 })
-export class TodoListPageComponent implements OnInit {
+export class TodoListPageComponent implements OnInit, OnDestroy {
+
+  // subs
+  selectAllTodosSub$: Subscription;
+  selectAllUsers$: Subscription;
 
   public todoText = '';
 
@@ -62,11 +66,11 @@ export class TodoListPageComponent implements OnInit {
   private allUsers: User[] = [];
 
   constructor(private store: Store<RootState>) {
-    this.store
+    this.selectAllTodosSub$ = this.store
       .select(selectAllTodos)
       .subscribe((todos) => (this.todos = todos));
 
-    this.store
+    this.selectAllUsers$ = this.store
       .select(selectAllUsers)
       .subscribe((users) => {
         this.allUsers = users;
@@ -166,6 +170,11 @@ export class TodoListPageComponent implements OnInit {
 
     // moveItemInArray(this.todos, prevIndex, currIndex);
     this.store.dispatch(TodoActions.ReorderTodo({prevIndex, currIndex}))
+  }
+
+  ngOnDestroy() {
+    this.selectAllUsers$.unsubscribe();
+    this.selectAllTodosSub$.unsubscribe();
   }
 
 }

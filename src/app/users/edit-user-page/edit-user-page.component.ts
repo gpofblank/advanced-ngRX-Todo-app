@@ -41,6 +41,10 @@ export class EditUserPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    const btn = document.getElementById('saveUser');
+    document.body.onkeydown = (e) => {
+      if (e.key === 'Enter') {btn.click()}
+    };
   }
 
   submit() {
