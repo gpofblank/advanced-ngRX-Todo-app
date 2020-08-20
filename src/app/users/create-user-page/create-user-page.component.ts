@@ -18,7 +18,6 @@ export class CreateUserPageComponent implements OnInit {
       id: 0,
       name: '',
       email: '',
-      tasks: []
     };
 
   public userAddForm: FormGroup;
@@ -30,7 +29,6 @@ export class CreateUserPageComponent implements OnInit {
     this.userAddForm = this.fb.group({
       name: this.user.name,
       email: this.user.email,
-      tasks: this.user.tasks,
     });
   }
 

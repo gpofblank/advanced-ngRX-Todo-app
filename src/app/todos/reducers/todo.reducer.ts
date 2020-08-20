@@ -35,3 +35,6 @@ export const selectAll = (state: EntityState<Todo>) =>
 
 export const selectById = (id) =>
   createSelector(selectEntities, (todoEntries) => todoEntries[id]);
+
+// export const selectUserTodosById = (id) =>
+  // createSelector(selectEntities, (todoEntries) => todoEntries.entities.createdForIds.filter(u => u.id === id));

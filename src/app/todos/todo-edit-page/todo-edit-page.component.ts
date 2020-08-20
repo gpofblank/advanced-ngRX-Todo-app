@@ -73,7 +73,7 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
 
     this.selectTodoByIdSub$ = this.store.select(selectTodoById(id)).subscribe((todo) => {
         this.todo = todo;
-        this.users = todo.createdForNames as string[];
+        this.users = todo.createdForNames;
         // debugger;
         // todo.createdForNames.map(u => this.users.push(u.trim()));
     });

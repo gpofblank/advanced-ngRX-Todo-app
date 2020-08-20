@@ -14,7 +14,9 @@ import {Subscription} from 'rxjs';
 export class UserDetailsPageComponent implements OnInit, OnDestroy{
 
   // subs
-  userByIdSub$: Subscription;
+  private userByIdSub$: Subscription;
+  private selectUserTodosSub$: Subscription;
+
 
   public user: User;
   public todos: Todo[];
@@ -25,14 +27,16 @@ export class UserDetailsPageComponent implements OnInit, OnDestroy{
     this.userByIdSub$ = this.store.select(selectUserById(userId))
       .subscribe((user) => this.user = user);
 
-    // this.store.select(selec)
-  }
+    // this.selectUserTodosSub$ = this.store.select(selectUserTodos(userId))
+    //   .subscribe((todos) => this.todos = todos);
+    }
 
   ngOnInit(): void {
   }
 
   ngOnDestroy() {
     this.userByIdSub$.unsubscribe();
+   // this.selectUserTodosSub$.unsubscribe();
   }
 
 }

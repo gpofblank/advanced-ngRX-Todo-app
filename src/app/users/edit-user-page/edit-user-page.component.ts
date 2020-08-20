@@ -19,7 +19,6 @@ export class EditUserPageComponent implements OnInit {
       id: 0,
       name: '',
       email: '',
-      tasks: []
     };
 
   public userEditForm: FormGroup;
@@ -36,7 +35,6 @@ export class EditUserPageComponent implements OnInit {
     this.userEditForm = this.fb.group({
       name: this.user.name,
       email: this.user.email,
-      tasks: this.user.tasks,
     });
   }
 
