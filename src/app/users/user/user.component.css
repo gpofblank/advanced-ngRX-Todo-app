@@ -1,0 +1,15 @@
+.icon {
+  font-size: 40px;
+}
+
+.btn {
+  margin: 5px;
+}
+
+mat-card {
+  margin-bottom: 10px;
+}
+
+mat-card-footer {
+  margin-top: -30px;
+}

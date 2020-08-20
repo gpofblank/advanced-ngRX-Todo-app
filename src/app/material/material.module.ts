@@ -12,6 +12,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTreeModule} from '@angular/material/tree';
+import {MatTableModule} from '@angular/material/table';
 
 const MODULES = [
   MatButtonModule,
@@ -25,7 +26,8 @@ const MODULES = [
   MatListModule,
   MatToolbarModule,
   MatMenuModule,
-  MatTreeModule
+  MatTreeModule,
+  MatTableModule
 ];
 
 @NgModule({
