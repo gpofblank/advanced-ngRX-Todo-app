@@ -13,6 +13,7 @@ import {ListUsersPageComponent} from './list-users-page/list-users-page.componen
 import {UserDetailsPageComponent} from './user-details-page/user-details-page.component';
 import {UserComponent} from './user/user.component';
 import {TodosModule} from '../todos/todos.module';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import {TodosModule} from '../todos/todos.module';
   ],
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
