@@ -1,3 +1,8 @@
-<mat-list role="list">
-  <mat-list-item *ngFor="let user of users" role="listitem">{{user.name}}</mat-list-item>
-</mat-list>
+<mat-card class="form-container">
+  <mat-card-header>
+    <mat-card-title>All Users</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-user *ngFor="let user of users" [user]="user"></app-user>
+  </mat-card-content>
+</mat-card>
