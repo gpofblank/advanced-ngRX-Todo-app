@@ -12,7 +12,8 @@ import * as TodoActions from '../actions/todo.actions';
 export class TodoComponent implements OnInit {
   @Input() todo: Todo;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+  }
 
   public onComplete() {
     this.store.dispatch(TodoActions.EditTodo({ updates: { id: this.todo.id, changes: {completed: true}}}));

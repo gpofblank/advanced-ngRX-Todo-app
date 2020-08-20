@@ -12,6 +12,7 @@ import {EditUserPageComponent} from './edit-user-page/edit-user-page.component';
 import {ListUsersPageComponent} from './list-users-page/list-users-page.component';
 import {UserDetailsPageComponent} from './user-details-page/user-details-page.component';
 import {UserComponent} from './user/user.component';
+import {TodosModule} from '../todos/todos.module';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import {UserComponent} from './user/user.component';
     DragDropModule,
     RouterModule,
     StoreModule.forFeature('users', fromUsers.reducer),
+    TodosModule,
   ]
 })
 export class UsersModule {

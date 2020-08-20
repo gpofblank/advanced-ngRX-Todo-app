@@ -1,6 +1,12 @@
 <div class="todo" [ngClass]="{ completed: todo.completed }" id="{{ todo.id }}">
   <div class="header">
-    Created at: {{ todo.createdAt.toLocaleString() }}
+    <div>Created at: {{ todo.createdAt.toLocaleString() }}</div>
+    <mat-chip-list aria-label="User selection">
+      <div style="margin-top: 2px;">Created for:</div>
+      <mat-chip *ngFor="let user of todo.createdForNames">
+        {{user}}
+      </mat-chip>
+    </mat-chip-list>
   </div>
   <div class="divider"></div>
 

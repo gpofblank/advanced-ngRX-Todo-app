@@ -14,6 +14,33 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
+      <mat-form-field class="formHolder custom-todo-chip-list">
+        <mat-label>Created For</mat-label>
+        <mat-chip-list #chipList aria-label="User selection">
+          <mat-chip
+            *ngFor="let user of users"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="remove(user)">
+            {{user}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input
+            placeholder="New user..."
+            #userInput
+            [formControl]="userCtrl"
+            [matAutocomplete]="auto"
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)"
+            formControlName="createdForNames">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
+            {{user}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
       <mat-form-field class="form-field">
         <mat-label>Text</mat-label>
         <textarea formControlName="text" type="text" matInput>{{todo.text}}</textarea>

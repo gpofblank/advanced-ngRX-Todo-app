@@ -1,10 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {Todo} from '../models/todo';
 import {Store} from '@ngrx/store';
 import * as TodoActions from '../actions/todo.actions';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {CdkDragDrop} from '@angular/cdk/drag-drop';
-import { RootState, selectAllTodos } from 'src/app/root.state';
+import {RootState, selectAllTodos, selectAllUsers} from 'src/app/root.state';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {FormControl} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {Observable, scheduled, throwError} from 'rxjs';
+import {filter, map, startWith} from 'rxjs/operators';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {User} from '../../users/models/user';
+
 
 
 
@@ -37,31 +45,38 @@ export class TodoListPageComponent implements OnInit {
 
   todos: Todo[] = [];
 
-  // todoTestData: Todo[] = [
-  //   {
-  //     id: 1,
-  //     text: 'da otida za hlqb',
-  //     createdAt: new Date(),
-  //     completed: false
-  //   },
-  //   {
-  //     id: 2,
-  //     text: 'da otida za voda',
-  //     createdAt: new Date(),
-  //     completed: false
-  //   },
-  //   {
-  //     id: 3,
-  //     text: 'da otida do Varna',
-  //     createdAt: new Date(),
-  //     completed: false
-  //   }];
+  // chips stuff
+  visible = true;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  userCtrl = new FormControl();
+  filteredUsers: Observable<string[]>;
+  users: string[] = [];
+  allUsersNames: string[] = [];
+
+  @ViewChild('userInput') userInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
+  //
+
+  private allUsers: User[] = [];
 
   constructor(private store: Store<RootState>) {
     this.store
       .select(selectAllTodos)
       .subscribe((todos) => (this.todos = todos));
-    // this.store.dispatch(TodoActions.FillInTodos({todos: this.todoTestData}));
+
+    this.store
+      .select(selectAllUsers)
+      .subscribe((users) => {
+        this.allUsers = users;
+        users.map((u) => this.allUsersNames.push(u.name));
+      }
+  );
+
+    this.filteredUsers = this.userCtrl.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) => user ? this._filter(user) : this.allUsersNames.slice()));
   }
 
   ngOnInit() {
@@ -74,12 +89,48 @@ export class TodoListPageComponent implements OnInit {
     //     }
     //   });
 
-
     const btn = document.getElementById('addTodo');
     document.body.onkeydown = (e) => {
       if (e.key === 'Enter') {btn.click()}
     };
 
+  }
+
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our user
+    if ((value || '').trim()) {
+      this.users.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.userCtrl.setValue(null);
+  }
+
+  remove(user: string): void {
+    const index = this.users.indexOf(user);
+
+    if (index >= 0) {
+      this.users.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.users.push(event.option.viewValue);
+    this.userInput.nativeElement.value = '';
+    this.userCtrl.setValue(null);
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.allUsersNames.filter(user => user.toLowerCase().indexOf(filterValue) === 0);
   }
 
   public addTodo() {
@@ -88,17 +139,22 @@ export class TodoListPageComponent implements OnInit {
     }
 
     const id = Math.random();
+    const createdForIds = this.allUsers.filter(u => this.users.includes(u.name)).map(u => u.id);
+    const createdForNames = this.users;
 
     const todo: Todo = {
       id,
       text: this.todoText,
       completed: false,
       createdAt: new Date(),
+      createdForIds,
+      createdForNames
     };
 
-    this.todoText = '';
-
     this.store.dispatch(TodoActions.AddTodo({todo}));
+
+    this.todoText = '';
+    this.userCtrl.setValue(null);
   }
 
   drop(event: CdkDragDrop<Todo[]>) {

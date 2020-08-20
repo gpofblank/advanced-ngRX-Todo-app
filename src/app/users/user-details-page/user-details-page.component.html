@@ -1,3 +1,19 @@
 <mat-card>
   <mat-card-title>Details for user {{user.name}}</mat-card-title>
 </mat-card>
+<mat-card>
+  <mat-card-content>
+    <div>Name: {{user.name}}</div>
+    <div>Email: {{user.email}}<</div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-title>
+    <div>Todos</div>
+    <div class="todos">
+      <app-todo [@fadeAnimation]="'in'" *ngFor="let todo of todos" [todo]="todo" cdkDrag [cdkDragData]="todo">{{todo}}></app-todo>
+    </div>
+  </mat-card-title>
+</mat-card>
+

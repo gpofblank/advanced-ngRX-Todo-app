@@ -11,6 +11,7 @@ import {MaterialModule} from '../material/material.module';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {AppRoutingModule} from '../app-routing.module';
 import {RouterModule} from '@angular/router';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -19,8 +20,12 @@ import {RouterModule} from '@angular/router';
     TodoEditPageComponent,
     TodoComponent,
   ],
+  exports: [
+    TodoComponent
+  ],
   imports: [
     CommonModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     StoreModule.forFeature('todos', fromTodos.reducer),
     ReactiveFormsModule,
