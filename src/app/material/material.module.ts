@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
@@ -8,6 +8,10 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import {MatListModule} from '@angular/material/list';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTreeModule} from '@angular/material/tree';
 
 const MODULES = [
   MatButtonModule,
@@ -18,6 +22,10 @@ const MODULES = [
   MatAutocompleteModule,
   MatDatepickerModule,
   MatNativeDateModule,
+  MatListModule,
+  MatToolbarModule,
+  MatMenuModule,
+  MatTreeModule
 ];
 
 @NgModule({
@@ -25,4 +33,5 @@ const MODULES = [
   imports: [CommonModule, ...MODULES],
   exports: [...MODULES],
 })
-export class MaterialModule { }
+export class MaterialModule {
+}

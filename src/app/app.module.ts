@@ -13,12 +13,13 @@ import {StartComponent} from './start/start.component';
 import {TodosModule} from './todos/todos.module';
 import {RouterModule} from '@angular/router';
 import {UsersModule} from './users/users.module';
+import { ToolbarComponent } from './toolbar/toolbar.component';
 
 
 
 @NgModule({
   declarations: [
-    AppComponent, StartComponent
+    AppComponent, StartComponent, ToolbarComponent
   ],
   imports: [
     BrowserModule,

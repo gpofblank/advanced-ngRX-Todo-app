@@ -1,0 +1,15 @@
+<mat-toolbar color="base">
+  <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="users" routerLink="/users">Users</button>
+    <button mat-menu-item routerLink="/todos">Todos</button>
+  </mat-menu>
+
+  <mat-menu #users="matMenu">
+    <button mat-menu-item routerLink="/users">List Users</button>
+    <button mat-menu-item routerLink="/users/create">Create User</button>
+  </mat-menu>
+
+  <span class="nav-spacer"></span>
+  <span>Advanced Todo App (ngRX)</span>
+</mat-toolbar>
