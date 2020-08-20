@@ -159,6 +159,7 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
 
     this.todoText = '';
     this.userCtrl.setValue(null);
+    this.users = [];
   }
 
   drop(event: CdkDragDrop<Todo[]>) {
