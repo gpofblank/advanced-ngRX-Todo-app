@@ -19,9 +19,19 @@ const todoReducer = createReducer(
     adapter.updateOne(updates, state)
   ),
 
-  on(TodoActions.AddTodo, (state, {todo}) =>
-    adapter.addOne(todo, state)
-  ),
+  on(TodoActions.AddTodo, (state, {todo}) => {
+    const todoId: number = todo.id;
+    const entities = state.entities;
+
+    return {
+      ...state,
+      ids: [todoId, ...state.ids],
+      entities: {...entities, [todoId]: {...todo}}
+    };
+  }),
+  // on(TodoActions.AddTodo, (state, {todo}) =>
+  //  adapter.addOne(todo, state)
+  // ),
 
   on(TodoActions.ReorderTodo, (state: EntityState<Todo>, {prevIndex, currIndex}) => {
     const todos = [...state.ids];
