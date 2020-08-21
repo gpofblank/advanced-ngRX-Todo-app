@@ -58,6 +58,8 @@ export class EditUserPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.selectUserByIdSub$.unsubscribe();
+    if (this.selectUserByIdSub$) {
+      this.selectUserByIdSub$.unsubscribe();
+    }
   }
 }

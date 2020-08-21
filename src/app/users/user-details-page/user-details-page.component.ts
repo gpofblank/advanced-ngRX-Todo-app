@@ -21,7 +21,7 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
       // fade in when created. this could also be written as transition('void => *')
       transition(':enter', [
         style({opacity: 0}),
-        animate(800 )
+        animate(800)
       ]),
 
       // fade out when destroyed. this could also be written as transition('void => *')
@@ -30,20 +30,17 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
     ])
   ]
 })
-export class UserDetailsPageComponent implements OnInit, OnDestroy{
-
-  // subs
-  private userByIdSub$: Subscription;
-  private allTodos$: Subscription;
-  // private selectUserTodosSub$: Subscription;
-
-  private rawTodos: Todo[];
+export class UserDetailsPageComponent implements OnInit, OnDestroy {
 
   public user: User;
   public todos: Todo[];
+  // private selectUserTodosSub$: Subscription;
+  // subs
+  private userByIdSub$: Subscription;
+  private allTodos$: Subscription;
+  private rawTodos: Todo[];
 
-
-  constructor(private store: Store<RootState>, private route: ActivatedRoute ) {
+  constructor(private store: Store<RootState>, private route: ActivatedRoute) {
     const userId = this.route.snapshot.params.id;
 
     this.userByIdSub$ = this.store.select(selectUserById(userId))
@@ -53,7 +50,7 @@ export class UserDetailsPageComponent implements OnInit, OnDestroy{
       .subscribe((rawT) => this.rawTodos = rawT);
 
     this.todos = this.rawTodos.filter((t) => t.createdForNames.includes(this.user.name));
-    console.log(this.todos)
+    console.log(this.todos);
 
     // this.selectUserTodosSub$ = this.store.select(selectUserTodos(this.user.id))
     //   .subscribe((todos) => this.todos = todos);
@@ -63,9 +60,12 @@ export class UserDetailsPageComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy() {
-    this.userByIdSub$.unsubscribe();
-    this.allTodos$.unsubscribe();
-    // this.selectUserTodosSub$.unsubscribe();
+    if (this.userByIdSub$) {
+      this.userByIdSub$.unsubscribe();
+    }
+    if (this.allTodos$) {
+      this.allTodos$.unsubscribe();
+    }
   }
 
 }

@@ -1,10 +1,9 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {Todo} from '../models/todo';
 import * as TodoActions from '../actions/todo.actions';
-import {selectById} from '../reducers/todo.reducer';
 import {RootState, selectAllUsers, selectTodoById} from '../../root.state';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {Observable, Subscription} from 'rxjs';
@@ -20,13 +19,10 @@ import {map, startWith} from 'rxjs/operators';
 })
 export class TodoEditPageComponent implements OnInit, OnDestroy {
 
-  private todoId: number;
-
   public todo: Todo;
   public todoEditForm: FormGroup;
   public createdAt: FormControl;
   public text: FormControl;
-
   // chips stuff
   visible = true;
   selectable = true;
@@ -36,11 +32,10 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
   filteredUsers: Observable<string[]>;
   users: string[] = [];
   allUsersNames: string[] = [];
-
   @ViewChild('userInput') userInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
+  private todoId: number;
   //
-
   private allUsers: User[] = [];
 
   // subs
@@ -85,7 +80,9 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
 
     const btn = document.getElementById('saveTodo');
     document.body.onkeydown = (e) => {
-      if (e.key === 'Enter') {btn.click()}
+      if (e.key === 'Enter') {
+        btn.click();
+      }
     };
   }
 
@@ -121,26 +118,30 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
     this.userCtrl.setValue(null);
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.allUsersNames.filter(user => user.toLowerCase().indexOf(filterValue) === 0);
-  }
-
   submit() {
     if (this.todoEditForm.valid) {
       const id = this.todoId;
       const changes: Partial<Todo> = this.todoEditForm.value;
 
       this.store.dispatch(TodoActions.EditTodo({
-        updates: {id, changes},
-      })
+          updates: {id, changes},
+        })
       );
       this.router.navigateByUrl('/todos');
     }
   }
 
   ngOnDestroy() {
-    this.selectAllUsersSub$.unsubscribe();
-    this.selectTodoByIdSub$.unsubscribe();
+    if (this.selectTodoByIdSub$) {
+      this.selectTodoByIdSub$.unsubscribe();
+    }
+    if (this.selectAllUsersSub$) {
+      this.selectAllUsersSub$.unsubscribe();
+    }
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.allUsersNames.filter(user => user.toLowerCase().indexOf(filterValue) === 0);
   }
 }

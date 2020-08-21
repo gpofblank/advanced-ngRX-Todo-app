@@ -8,12 +8,10 @@ import {RootState, selectAllTodos, selectAllUsers} from 'src/app/root.state';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl} from '@angular/forms';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {Observable, scheduled, Subscription, throwError} from 'rxjs';
-import {filter, map, startWith} from 'rxjs/operators';
+import {Observable, Subscription} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {User} from '../../users/models/user';
-
-
 
 
 @Component({
@@ -30,7 +28,7 @@ import {User} from '../../users/models/user';
       // fade in when created. this could also be written as transition('void => *')
       transition(':enter', [
         style({opacity: 0}),
-        animate(800 )
+        animate(800)
       ]),
 
       // fade out when destroyed. this could also be written as transition('void => *')
@@ -73,10 +71,10 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
     this.selectAllUsers$ = this.store
       .select(selectAllUsers)
       .subscribe((users) => {
-        this.allUsers = users;
-        users.map((u) => this.allUsersNames.push(u.name));
-      }
-  );
+          this.allUsers = users;
+          users.map((u) => this.allUsersNames.push(u.name));
+        }
+      );
 
     this.filteredUsers = this.userCtrl.valueChanges.pipe(
       startWith(null),
@@ -95,7 +93,9 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
 
     const btn = document.getElementById('addTodo');
     document.body.onkeydown = (e) => {
-      if (e.key === 'Enter') {btn.click()}
+      if (e.key === 'Enter') {
+        btn.click();
+      }
     };
 
   }
@@ -131,12 +131,6 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
     this.userCtrl.setValue(null);
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allUsersNames.filter(user => user.toLowerCase().indexOf(filterValue) === 0);
-  }
-
   public addTodo() {
     if (this.todoText.length == 0) {
       return;
@@ -170,12 +164,22 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
     const currIndex = event.currentIndex;
 
     // moveItemInArray(this.todos, prevIndex, currIndex);
-    this.store.dispatch(TodoActions.ReorderTodo({prevIndex, currIndex}))
+    this.store.dispatch(TodoActions.ReorderTodo({prevIndex, currIndex}));
   }
 
   ngOnDestroy() {
-    this.selectAllUsers$.unsubscribe();
-    this.selectAllTodosSub$.unsubscribe();
+    if (this.selectAllTodosSub$) {
+      this.selectAllTodosSub$.unsubscribe();
+    }
+    if (this.selectAllUsers$) {
+      this.selectAllUsers$.unsubscribe();
+    }
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.allUsersNames.filter(user => user.toLowerCase().indexOf(filterValue) === 0);
   }
 
 }
