@@ -13,3 +13,7 @@ mat-card {
 .icon {
   font-size: 40px;
 }
+
+.wrapper {
+  padding: 20px;
+}
