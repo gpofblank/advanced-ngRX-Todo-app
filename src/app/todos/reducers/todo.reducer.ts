@@ -3,6 +3,7 @@ import {Action, createReducer, createSelector, on} from '@ngrx/store';
 import {Todo} from '../models/todo';
 
 import * as TodoActions from '../actions/todo.actions';
+import {moveItemInArray} from '@angular/cdk/drag-drop';
 
 export interface State extends EntityState<Todo> {
 }
@@ -21,17 +22,23 @@ const todoReducer = createReducer(
   on(TodoActions.AddTodo, (state, {todo}) =>
     adapter.addOne(todo, state)
   ),
+
+  on(TodoActions.ReorderTodo, (state: EntityState<Todo>, {prevIndex, currIndex}) => {
+    const todos = [...state.ids];
+    moveItemInArray(todos, prevIndex, currIndex);
+    return {...state, ids: todos};
+  })
 );
 
 export const reducer = (state: State, action: Action) => {
   return todoReducer(state, action);
 };
 
-export const {selectEntities} = adapter.getSelectors();
+export const {selectEntities, selectAll} = adapter.getSelectors();
 
-// equal to the select all function from adapter.getSelectors()
-export const selectAll = (state: EntityState<Todo>) =>
-  (state.ids as number[]).map((id) => state.entities[id]);
+// equivalent to the select all function from adapter.getSelectors()
+// export const selectAll = (state: EntityState<Todo>) =>
+//   (state.ids as number[]).map((id) => state.entities[id]);
 
 export const selectById = (id) =>
   createSelector(selectEntities, (todoEntries) => todoEntries[id]);
