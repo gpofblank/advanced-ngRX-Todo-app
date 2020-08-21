@@ -1,26 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../models/user';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {RootState, selectUserById} from '../../root.state';
 import * as UserActions from '../actions/user.actions';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-edit-user-page',
   templateUrl: './edit-user-page.component.html',
   styleUrls: ['./edit-user-page.component.css']
 })
-export class EditUserPageComponent implements OnInit {
+export class EditUserPageComponent implements OnInit, OnDestroy {
 
+  private selectUserByIdSub$: Subscription;
   private userId;
-  public user: User =
-    {
-      id: 0,
-      name: '',
-      email: '',
-    };
 
+  public user: User;
   public userEditForm: FormGroup;
   public createdAt: FormControl;
   public text: FormControl;
@@ -31,6 +28,10 @@ export class EditUserPageComponent implements OnInit {
 
     this.store.select(selectUserById(this.userId))
       .subscribe((user) => this.user = user);
+
+    if (!this.user) {
+      this.router.navigateByUrl('/users');
+    }
 
     this.userEditForm = this.fb.group({
       name: this.user.name,
@@ -54,5 +55,9 @@ export class EditUserPageComponent implements OnInit {
 
       this.router.navigateByUrl('/users');
     }
+  }
+
+  ngOnDestroy() {
+    this.selectUserByIdSub$.unsubscribe();
   }
 }
