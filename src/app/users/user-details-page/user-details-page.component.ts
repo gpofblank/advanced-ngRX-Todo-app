@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RootState, selectAllTodos, selectUserById} from '../../root.state';
+import {RootState, selectAllTodos, selectTodosByUserId, selectUserById} from '../../root.state';
 import {Store} from '@ngrx/store';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Todo} from '../../todos/models/todo';
@@ -36,12 +36,10 @@ export class UserDetailsPageComponent implements OnInit, OnDestroy {
 
   public user: User;
   public todos: Todo[];
-  // private selectUserTodosSub$: Subscription;
 
   // subs
   private userByIdSub$: Subscription;
-  private allTodos$: Subscription;
-  private rawTodos: Todo[];
+  private selectTodosByUserIdSub$: Subscription;
 
   constructor(private store: Store<RootState>, private route: ActivatedRoute, private router: Router) {
     this.userId = this.route.snapshot.params.id;
@@ -53,14 +51,8 @@ export class UserDetailsPageComponent implements OnInit, OnDestroy {
       this.router.navigateByUrl('/users');
     }
 
-    this.allTodos$ = this.store.select(selectAllTodos)
-      .subscribe((rawT) => this.rawTodos = rawT);
-
-    this.todos = this.rawTodos.filter((t) => t.createdForNames.includes(this.user.name));
-    console.log(this.todos);
-
-    // this.selectUserTodosSub$ = this.store.select(selectUserTodos(this.user.id))
-    //   .subscribe((todos) => this.todos = todos);
+    this.selectTodosByUserIdSub$ = this.store.select(selectTodosByUserId(this.user.id))
+       .subscribe((todos) => this.todos = todos);
   }
 
   ngOnInit(): void {
@@ -70,8 +62,8 @@ export class UserDetailsPageComponent implements OnInit, OnDestroy {
     if (this.userByIdSub$) {
       this.userByIdSub$.unsubscribe();
     }
-    if (this.allTodos$) {
-      this.allTodos$.unsubscribe();
+    if (this.selectTodosByUserIdSub$) {
+      this.selectTodosByUserIdSub$.unsubscribe();
     }
   }
 

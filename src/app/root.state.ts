@@ -18,8 +18,8 @@ export const selectAllTodos = createSelector(
 export const selectTodoById = (todoId) =>
   createSelector(selectTodosState, fromTodos.selectById(todoId));
 
-// export const selectUserTodos = (id) =>
-//   createSelector(selectTodosState, fromTodos.selectUserTodosById(id));
+export const selectTodosByUserId = (id) =>
+  createSelector(selectTodosState, fromTodos.selectTodosByUid(id));
 
 // users
 export const selectUsersState = createFeatureSelector('users');

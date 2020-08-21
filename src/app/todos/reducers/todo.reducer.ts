@@ -50,5 +50,7 @@ export const {selectEntities, selectAll} = adapter.getSelectors();
 export const selectById = (id) =>
   createSelector(selectEntities, (todoEntries) => todoEntries[id]);
 
-// export const selectUserTodosById = (id) =>
-//   createSelector(selectEntities, (todoEntries) => todoEntries.entities.createdForIds);
+export const selectTodosByUid = (id) =>
+  createSelector(selectAll, (todoEntries) =>
+    todoEntries.filter((todo) => todo.createdForIds.some((uid) => uid === id))
+);
