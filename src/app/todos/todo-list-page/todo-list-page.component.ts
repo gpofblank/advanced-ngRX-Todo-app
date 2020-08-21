@@ -91,18 +91,22 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
     //     }
     //   });
 
-    const btn = document.getElementById('addTodo');
-    document.body.onkeydown = (e) => {
-      if (e.key === 'Enter') {
-        btn.click();
-      }
-    };
+    // const btn = document.getElementById('addTodo');
+    // document.body.onkeydown = (e) => {
+    //   if (e.key === 'Enter') {
+    //     btn.click();
+    //   }
+    // };
 
   }
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
+
+    if (this.allUsers.map(u => u.name != value )) {
+      return;
+    }
 
     // Add our user
     if ((value || '').trim()) {
@@ -132,7 +136,7 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
   }
 
   public addTodo() {
-    if (this.todoText.length == 0) {
+    if (this.todoText.length == 0 || this.users.length == 0) {
       return;
     }
 

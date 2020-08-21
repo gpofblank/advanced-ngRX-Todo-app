@@ -17,10 +17,17 @@ const userReducer = createReducer(
   on(UserActions.EditUser, (state, {updates}) =>
     adapter.updateOne(updates, state)
   ),
-
   on(UserActions.AddUser, (state, {user}) =>
     adapter.addOne(user, state)
   ),
+  // unshift - if need be
+  // on(UserActions.AddUser, (state, {user}) => {
+  //   return {
+  //     ...state,
+  //     ids: [user.id, ...state.ids],
+  //     entities: { [user.id]: {...user}, ...state.entities }
+  //   };
+  // })
 );
 
 export const reducer = (state: State, action: Action) => {

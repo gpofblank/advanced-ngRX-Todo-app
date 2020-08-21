@@ -20,13 +20,10 @@ const todoReducer = createReducer(
   ),
 
   on(TodoActions.AddTodo, (state, {todo}) => {
-    const todoId: number = todo.id;
-    const entities = state.entities;
-
     return {
       ...state,
-      ids: [todoId, ...state.ids],
-      entities: {...entities, [todoId]: {...todo}}
+      ids: [todo.id, ...state.ids],
+      entities: {[todo.id]: {...todo}, ...state.entities}
     };
   }),
   // on(TodoActions.AddTodo, (state, {todo}) =>
