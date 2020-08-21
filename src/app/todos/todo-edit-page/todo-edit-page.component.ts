@@ -81,8 +81,8 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
     this.todoEditForm = this.fb.group({
       createdAt: this.todo.createdAt,
       text: this.todo.text,
-      createdForNames: this.todo.createdForNames,
-      createdForIds: this.todo.createdForIds
+      createdForNames: [this.todo.createdForNames],
+      createdForIds: [this.todo.createdForIds]
     });
 
     this.todoEditForm.patchValue(this.todo);
