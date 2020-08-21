@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {User} from '../../users/models/user';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Store} from '@ngrx/store';
 import {RootState, selectUserById} from '../../root.state';
@@ -27,16 +27,12 @@ export class CreateUserPageComponent implements OnInit {
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private store: Store<RootState>, private router: Router) {
 
     this.userAddForm = this.fb.group({
-      name: this.user.name,
-      email: this.user.email,
+      name: [this.user.name, Validators.required],
+      email: [this.user.email, Validators.email],
     });
   }
 
   ngOnInit() {
-    const btn = document.getElementById('addUser');
-    document.body.onkeydown = (e) => {
-      if (e.key === 'Enter') {btn.click()}
-    };
   }
 
   submit() {

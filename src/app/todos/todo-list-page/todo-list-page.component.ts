@@ -91,12 +91,12 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
     //     }
     //   });
 
-    // const btn = document.getElementById('addTodo');
-    // document.body.onkeydown = (e) => {
-    //   if (e.key === 'Enter') {
-    //     btn.click();
-    //   }
-    // };
+    const btn = document.getElementById('addTodo');
+    document.body.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        btn.click();
+      }
+    };
 
   }
 
