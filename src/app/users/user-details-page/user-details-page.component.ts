@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {RootState, selectAllTodos, selectUserById} from '../../root.state';
 import {Store} from '@ngrx/store';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Todo} from '../../todos/models/todo';
 import {User} from '../models/user';
 import {Subscription} from 'rxjs';
@@ -32,19 +32,26 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
 })
 export class UserDetailsPageComponent implements OnInit, OnDestroy {
 
+  private userId: number;
+
   public user: User;
   public todos: Todo[];
   // private selectUserTodosSub$: Subscription;
+
   // subs
   private userByIdSub$: Subscription;
   private allTodos$: Subscription;
   private rawTodos: Todo[];
 
-  constructor(private store: Store<RootState>, private route: ActivatedRoute) {
-    const userId = this.route.snapshot.params.id;
+  constructor(private store: Store<RootState>, private route: ActivatedRoute, private router: Router) {
+    this.userId = this.route.snapshot.params.id;
 
-    this.userByIdSub$ = this.store.select(selectUserById(userId))
+    this.userByIdSub$ = this.store.select(selectUserById(this.userId))
       .subscribe((user) => this.user = user);
+
+    if (!this.user) {
+      this.router.navigateByUrl('/users');
+    }
 
     this.allTodos$ = this.store.select(selectAllTodos)
       .subscribe((rawT) => this.rawTodos = rawT);
