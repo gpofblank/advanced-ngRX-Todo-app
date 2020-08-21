@@ -74,8 +74,6 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
     this.selectTodoByIdSub$ = this.store.select(selectTodoById(id)).subscribe((todo) => {
         this.todo = todo;
         this.users = todo.createdForNames;
-        // debugger;
-        // todo.createdForNames.map(u => this.users.push(u.trim()));
     });
 
     this.todoEditForm = this.fb.group({
@@ -85,7 +83,7 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
       createdForIds: [this.todo.createdForIds]
     });
 
-    this.todoEditForm.patchValue(this.todo);
+    // this.todoEditForm.patchValue(this.todo);
 
     const btn = document.getElementById('saveTodo');
     document.body.onkeydown = (e) => {
@@ -112,6 +110,7 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
 
   remove(user: string): void {
     const index = this.users.indexOf(user);
+    console.log(index);
 
     if (index >= 0) {
       this.users.splice(index, 1);
@@ -126,15 +125,12 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-
     return this.allUsersNames.filter(user => user.toLowerCase().indexOf(filterValue) === 0);
   }
 
   submit() {
     if (this.todoEditForm.valid) {
       const id: string = this.route.snapshot.params.id;
-      const createdForNames = this.users;
-      const createdForIds = this.allUsers.filter(u => this.users.includes(u.name)).map(u => u.id);
       const changes: Partial<Todo> = this.todoEditForm.value;
 
       this.store.dispatch(TodoActions.EditTodo({
