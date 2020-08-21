@@ -20,16 +20,9 @@ import {map, startWith} from 'rxjs/operators';
 })
 export class TodoEditPageComponent implements OnInit, OnDestroy {
 
-  public todo: Todo =
-    {
-      id: 0,
-      createdAt: new Date(),
-      createdForNames: [],
-      createdForIds: [],
-      text: '',
-      completed: false
-    };
+  private todoId: number;
 
+  public todo: Todo;
   public todoEditForm: FormGroup;
   public createdAt: FormControl;
   public text: FormControl;
@@ -55,6 +48,17 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
   private selectTodoByIdSub$: Subscription;
 
   constructor(private fb: FormBuilder, private route: ActivatedRoute, private store: Store<RootState>, private router: Router) {
+    this.todoId = this.route.snapshot.params.id;
+
+    this.selectTodoByIdSub$ = this.store.select(selectTodoById(this.todoId)).subscribe((todo) => {
+      this.todo = todo;
+
+      if (!this.todo) {
+        this.router.navigateByUrl('/todos');
+      } else {
+        this.users = todo.createdForNames;
+      }
+    });
 
     this.selectAllUsersSub$ = this.store
       .select(selectAllUsers)
@@ -69,12 +73,6 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const id: string = this.route.snapshot.params.id;
-
-    this.selectTodoByIdSub$ = this.store.select(selectTodoById(id)).subscribe((todo) => {
-        this.todo = todo;
-        this.users = todo.createdForNames;
-    });
 
     this.todoEditForm = this.fb.group({
       createdAt: this.todo.createdAt,
@@ -130,7 +128,7 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
 
   submit() {
     if (this.todoEditForm.valid) {
-      const id: string = this.route.snapshot.params.id;
+      const id = this.todoId;
       const changes: Partial<Todo> = this.todoEditForm.value;
 
       this.store.dispatch(TodoActions.EditTodo({
