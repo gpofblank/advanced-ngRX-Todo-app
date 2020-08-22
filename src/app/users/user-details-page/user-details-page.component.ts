@@ -44,6 +44,8 @@ export class UserDetailsPageComponent implements OnInit, OnDestroy {
   constructor(private store: Store<RootState>, private route: ActivatedRoute, private router: Router) {
     this.userId = this.route.snapshot.params.id;
 
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
     this.userByIdSub$ = this.store.select(selectUserById(this.userId))
       .subscribe((user) => this.user = user);
 
