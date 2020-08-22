@@ -51,7 +51,7 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
       if (!this.todo) {
         this.router.navigateByUrl('/todos');
       } else {
-        this.users = todo.createdForNames;
+        this.users = todo.users.map(u => u.name);
       }
     });
 
@@ -72,11 +72,8 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
     this.todoEditForm = this.fb.group({
       createdAt: this.todo.createdAt,
       text: this.todo.text,
-      createdForNames: [this.todo.createdForNames],
-      createdForIds: [this.todo.createdForIds]
+      users: [this.users]
     });
-
-    // this.todoEditForm.patchValue(this.todo);
 
     const btn = document.getElementById('saveTodo');
     document.body.onkeydown = (e) => {
@@ -121,6 +118,10 @@ export class TodoEditPageComponent implements OnInit, OnDestroy {
   submit() {
     if (this.todoEditForm.valid) {
       const id = this.todoId;
+
+      const userNamesToArrOfUsers = this.allUsers.filter((u) => this.users.some(uName => uName == u.name));
+      this.todoEditForm.patchValue({users: userNamesToArrOfUsers});
+
       const changes: Partial<Todo> = this.todoEditForm.value;
 
       this.store.dispatch(TodoActions.EditTodo({

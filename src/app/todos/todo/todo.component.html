@@ -3,8 +3,8 @@
     <div>Created at: {{ todo.createdAt.toLocaleString() }}</div>
     <mat-chip-list aria-label="User selection">
       <div style="margin-top: 2px;">Created for:</div>
-      <mat-chip *ngFor="let user of todo.createdForNames">
-        {{user}}
+      <mat-chip *ngFor="let user of todo.users">
+        {{user.name}}
       </mat-chip>
     </mat-chip-list>
   </div>

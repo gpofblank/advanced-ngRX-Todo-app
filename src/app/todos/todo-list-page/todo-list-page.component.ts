@@ -141,16 +141,14 @@ export class TodoListPageComponent implements OnInit, OnDestroy {
     }
 
     const id = Math.random();
-    const createdForIds = this.allUsers.filter(u => this.users.includes(u.name)).map(u => u.id);
-    const createdForNames = this.users;
+    const users = this.allUsers.filter((u) => this.users.some(name => name == u.name));
 
     const todo: Todo = {
       id,
       text: this.todoText,
       completed: false,
       createdAt: new Date(),
-      createdForIds,
-      createdForNames
+      users: users
     };
 
     this.store.dispatch(TodoActions.AddTodo({todo}));

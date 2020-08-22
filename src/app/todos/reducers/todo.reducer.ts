@@ -52,5 +52,5 @@ export const selectById = (id) =>
 
 export const selectTodosByUid = (id) =>
   createSelector(selectAll, (todoEntries) =>
-    todoEntries.filter((todo) => todo.createdForIds.some((uid) => uid === id))
+    todoEntries.filter((todo) => todo.users.some((uid) => uid.id === id))
 );
